@@ -333,13 +333,22 @@ EOF
 Install Grafana:
 
 sudo dnf install grafana -y
+
+<img width="433" alt="5 1" src="https://github.com/user-attachments/assets/b7d9dea1-daac-4bfb-b45c-43903cd66541">
+
+
 Start and enable Grafana:
 
 sudo systemctl start grafana-server
 sudo systemctl enable grafana-server
+
 Check Grafana status:
 
 sudo systemctl status grafana-server
+
+
+<img width="431" alt="5 2" src="https://github.com/user-attachments/assets/953520a6-6751-4705-bac5-1e90b8d78247">
+
 
 Step 1.2: Access Grafana Web Interface
 
@@ -350,6 +359,78 @@ Default login credentials:
 Username: admin
 
 Password: admin (you will be prompted to change it after the first login).
+
+To access the Grafana web interface, follow these detailed steps:
+
+Step-by-Step Guide to Access Grafana Web Interface
+
+Step 1: Ensure Grafana is Running
+Start Grafana:
+
+If you have not already started Grafana, you can do so with the following command (depending on your installation):
+
+sudo systemctl start grafana-server
+Enable Grafana to Start on Boot (Optional):
+
+To ensure that Grafana starts on system boot:
+
+sudo systemctl enable grafana-server
+Check Grafana Status:
+
+Verify that Grafana is running using:
+
+sudo systemctl status grafana-server
+Step 2: Access Grafana Web Interface
+
+Find Your Server's IP Address:
+
+Run the following command to find your server’s IP address:
+
+hostname -I
+Take note of the IP address.
+Open a Browser:
+
+On any machine connected to the same network (or through a VPN/tunnel for remote access), open a web browser such as Chrome, Firefox, or Edge.
+Navigate to Grafana Web Interface:
+
+In the browser's address bar, enter the URL using your server's IP address and the port Grafana uses (default is 3000):
+
+http://<your-server-ip>:3000
+
+Example:
+
+http://192.168.1.100:3000
+
+Step 3: Log In to Grafana
+
+Default Credentials:
+
+The default login credentials are:
+
+Username: admin
+Password: admin
+Change Password:
+
+After you log in for the first time, Grafana will prompt you to change the default password. Enter a new secure password and save the changes.
+
+Access the Dashboard:
+
+Once logged in, you will be taken to the Grafana dashboard, where you can start setting up data sources, dashboards, and visualizations.
+
+Step 4: Troubleshooting
+
+If you cannot access Grafana:
+
+Firewall: Ensure the firewall allows traffic on port 3000:
+
+sudo firewall-cmd --add-port=3000/tcp --permanent
+sudo firewall-cmd --reload
+
+Server IP: Double-check your server's IP address.
+
+Grafana Running: Make sure Grafana is running using sudo systemctl status grafana-server.
+
+Once you complete these steps, you will have access to the Grafana interface to begin creating dashboards and visualizations.
 
 # 2. Install and Configure Rocket.Chat on CentOS 8
 

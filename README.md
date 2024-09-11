@@ -352,6 +352,9 @@ sudo systemctl status grafana-server
 
 Step 1.2: Access Grafana Web Interface
 
+<img width="162" alt="graffaf" src="https://github.com/user-attachments/assets/11b9dec8-9139-4147-affb-a87c108c9d0d">
+
+
 Open a browser and go to: http://<your-server-ip>:3000
 
 Default login credentials:
@@ -588,6 +591,7 @@ Alert configuration: In Grafana, notification channel setup, alert rule creation
 Testing results: Include screenshots or logs of successful alerts being sent to Rocket.Chat.
 
 Troubleshooting steps: Note down any issues encountered and their solutions.
+
 This step-by-step process ensures that you can successfully integrate Grafana with Rocket.Chat on CentOS 8 for monitoring and incident notification.
 
 

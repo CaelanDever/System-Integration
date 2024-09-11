@@ -236,6 +236,11 @@ Realm Settings:
 
 Session timeout: Configure in Realm Settings -> Tokens.
 
+
+<img width="252" alt="p4 11" src="https://github.com/user-attachments/assets/5bfebfbb-c87a-4314-a5e3-0416d972a5b1">
+
+
+
 Single Logout: Configure in Realm Settings -> Logout.
 
 Authentication Flows:

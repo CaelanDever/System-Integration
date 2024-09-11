@@ -310,6 +310,194 @@ Open Source: Being open-source, Keycloak provides a cost-effective solution with
 
 By adhering to the outlined steps and criteria, Keycloak can effectively manage SSO for an organization, enhancing user experience and security across multiple applications.
 
+--------------------------------------------------------------
+
+# Tier 3 Task 2: Integration of Monitoring and Reporting Systems with Notification System
+
+# 1. Install and Configure Grafana on CentOS 8
+
+Step 1.1: Install Grafana
+
+Add the Grafana repository:
+
+sudo tee /etc/yum.repos.d/grafana.repo <<EOF
+[grafana]
+name=Grafana
+baseurl=https://packages.grafana.com/oss/rpm
+repo_gpgcheck=1
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.grafana.com/gpg.key
+EOF
+
+Install Grafana:
+
+sudo dnf install grafana -y
+Start and enable Grafana:
+
+sudo systemctl start grafana-server
+sudo systemctl enable grafana-server
+Check Grafana status:
+
+sudo systemctl status grafana-server
+
+Step 1.2: Access Grafana Web Interface
+
+Open a browser and go to: http://<your-server-ip>:3000
+
+Default login credentials:
+
+Username: admin
+
+Password: admin (you will be prompted to change it after the first login).
+
+# 2. Install and Configure Rocket.Chat on CentOS 8
+
+Step 2.1: Install Rocket.Chat
+
+Install necessary dependencies:
+
+sudo dnf install epel-release -y
+sudo dnf install curl GraphicsMagick gmp-devel -y
+
+Install MongoDB for Rocket.Chat:
+
+sudo tee /etc/yum.repos.d/mongodb-org-4.0.repo <<EOF
+[mongodb-org-4.0]
+
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/8/mongodb-org/4.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-4.0.asc
+EOF
+
+Then install MongoDB:
+
+sudo dnf install mongodb-org -y
+sudo systemctl start mongod
+sudo systemctl enable mongod
+Install Node.js:
+
+curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash -
+sudo dnf install nodejs -y
+Download and Install Rocket.Chat:
+
+curl -L https://releases.rocket.chat/latest/download -o rocket.chat.tgz
+tar -xzf rocket.chat.tgz
+mv bundle /opt/Rocket.Chat
+cd /opt/Rocket.Chat/programs/server
+npm install
+Create a Rocket.Chat service:
+
+sudo tee /lib/systemd/system/rocketchat.service <<EOF
+[Unit]
+Description=Rocket.Chat server
+After=network.target remote-fs.target nss-lookup.target mongod.target
+
+[Service]
+ExecStart=/usr/local/bin/node /opt/Rocket.Chat/main.js
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=rocketchat
+User=root
+Environment=MONGO_URL=mongodb://localhost:27017/rocketchat
+Environment=ROOT_URL=http://localhost:3000
+Environment=PORT=3000
+
+[Install]
+WantedBy=multi-user.target
+EOF
+Start and enable Rocket.Chat:
+
+sudo systemctl daemon-reload
+sudo systemctl start rocketchat
+sudo systemctl enable rocketchat
+
+Step 2.2: Access Rocket.Chat Web Interface
+Open a browser and go to: http://<your-server-ip>:3000
+Set up the admin account and workspace.
+
+# 3. Configure Grafana to Send Alerts to Rocket.Chat
+
+Step 3.1: Create an Incoming Webhook in Rocket.Chat
+
+Login to Rocket.Chat as an admin.
+
+Navigate to: Administration -> Integrations -> New Integration.
+
+Choose Incoming Webhook and set the following:
+
+Name: Grafana Alerts
+Channel: Select a channel to receive alerts (e.g., #alerts)
+Enabled: Yes
+Webhook URL: Save this URL for later use in Grafana.
+Step 3.2: Configure Grafana to Use the Webhook
+Login to Grafana.
+
+Go to: Alerting -> Notification Channels.
+
+Click New Channel and fill in the following:
+
+Name: Rocket.Chat Alerts
+Type: Webhook
+URL: Paste the Rocket.Chat Webhook URL from the previous step.
+Send reminders: Yes (optional)
+Alert OK: Yes (optional)
+Click Save.
+
+Step 3.3: Create an Alert Rule in Grafana
+Go to: Alerting -> Alert Rules.
+
+Create a New Alert:
+
+Name: Critical Server Health
+Condition: Set the metrics you want to monitor (e.g., CPU usage, memory usage, etc.)
+Evaluate every: 1 minute
+Send to: Select the Rocket.Chat Alerts notification channel.
+Save the alert.
+
+# 4. Testing the Integration
+
+Step 4.1: Trigger a Test Alert
+
+Temporarily lower the threshold for one of your monitored metrics to trigger an alert (e.g., CPU usage > 1%).
+
+Confirm that an alert is sent to the specified Rocket.Chat channel.
+
+Step 4.2: Verify Alert in Rocket.Chat
+
+Check that the alert is visible in Rocket.Chat, including the correct message, severity, and the channel it's posted in.
+
+# 5. Troubleshooting
+
+Rocket.Chat Webhook not receiving alerts?
+
+Check firewall settings to ensure the Grafana server can reach Rocket.Chat.
+
+Check the Webhook URL and ensure it's correctly pasted into Grafana.
+
+Review logs for Grafana and Rocket.Chat for any errors:
+
+Grafana logs: /var/log/grafana/grafana.log
+Rocket.Chat logs: journalctl -u rocketchat
+
+# 6. Documenting the Integration Process
+Ensure the following details are documented:
+
+Grafana setup steps: Including repository configuration, installation, and startup.
+
+Rocket.Chat setup steps: MongoDB, Node.js, Rocket.Chat installation, and Web Interface setup.
+
+Webhook configuration: In Rocket.Chat, details of how the incoming Webhook was created.
+
+Alert configuration: In Grafana, notification channel setup, alert rule creation.
+
+Testing results: Include screenshots or logs of successful alerts being sent to Rocket.Chat.
+
+Troubleshooting steps: Note down any issues encountered and their solutions.
+This step-by-step process ensures that you can successfully integrate Grafana with Rocket.Chat on CentOS 8 for monitoring and incident notification.
+
 
 
 

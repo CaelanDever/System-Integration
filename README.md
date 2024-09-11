@@ -375,6 +375,9 @@ Enable Grafana to Start on Boot (Optional):
 To ensure that Grafana starts on system boot:
 
 sudo systemctl enable grafana-server
+
+<img width="425" alt="p5 3" src="https://github.com/user-attachments/assets/d22e8c2e-3088-433f-a0a2-6f751895f068">
+
 Check Grafana Status:
 
 Verify that Grafana is running using:
@@ -441,6 +444,9 @@ Install necessary dependencies:
 sudo dnf install epel-release -y
 sudo dnf install curl GraphicsMagick gmp-devel -y
 
+<img width="426" alt="5 5" src="https://github.com/user-attachments/assets/aaa1ce7a-cfec-4366-afde-7c3663775e97">
+
+
 Install MongoDB for Rocket.Chat:
 
 sudo tee /etc/yum.repos.d/mongodb-org-4.0.repo <<EOF
@@ -504,6 +510,11 @@ Set up the admin account and workspace.
 Step 3.1: Create an Incoming Webhook in Rocket.Chat
 
 Login to Rocket.Chat as an admin.
+
+
+<img width="311" alt="rocker" src="https://github.com/user-attachments/assets/04278e57-dabc-4130-ac2e-8f83e626644c">
+
+
 
 Navigate to: Administration -> Integrations -> New Integration.
 
